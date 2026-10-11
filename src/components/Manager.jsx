@@ -1,37 +1,37 @@
 import React from 'react'
-import { useRef, useState , useEffect} from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 const Manager = () => {
     const ref = useRef()
-    const [form, setform] = useState({site: "", username: "", password: ""})
+    const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setPasswordArray] = useState([]);
 
     useEffect(() => {
         let passwords = localStorage.getItem("passwords");
-        if(passwords){
+        if (passwords) {
             setPasswordArray(JSON.parse(passwords))
         }
-    },[])
+    }, [])
 
-    const showPassword = () =>{
+    const showPassword = () => {
         alert("show the password");
-        if(ref.current.src.includes("eyecross.png")){
+        if (ref.current.src.includes("eyecross.png")) {
             ref.current.src = "../icons/eye.png";
         }
-        else{
+        else {
             ref.current.src = "../icons/eyecross.png";
         }
     }
 
-    const savePassword = () =>{
-        setPasswordArray([...passwordArray,form])
-        localStorage.setItem("passwords",JSON.stringify([...passwordArray,form]))
-        console.log([...passwordArray,form]);
-        
+    const savePassword = () => {
+        setPasswordArray([...passwordArray, form])
+        localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+        console.log([...passwordArray, form]);
+
     }
 
-    const handleChange = (e) =>{
-        setform({...form, [e.target.name]: e.target.value})
+    const handleChange = (e) => {
+        setform({ ...form, [e.target.name]: e.target.value })
     }
     return (
         <>
@@ -55,25 +55,48 @@ const Manager = () => {
 
                         <div className="relative">
 
-                        <input value={form.password} onChange={handleChange} placeholder='Enter Password' className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='password' id='' />
-                        <span className="absolute right-[3px] top-[4px] cursor-pointer" onClick={showPassword}>
-                            <img ref={ref} width={26} src="../icons/eye.png" alt="eye" className="p-1" />
-                        </span>
+                            <input value={form.password} onChange={handleChange} placeholder='Enter Password' className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='password' id='' />
+                            <span className="absolute right-[3px] top-[4px] cursor-pointer" onClick={showPassword}>
+                                <img ref={ref} width={26} src="../icons/eye.png" alt="eye" className="p-1" />
+                            </span>
                         </div>
                     </div>
-                    
+
                     <button onClick={savePassword} className='flex justify-center items-center gap-2 bg-green-400 hover:bg-green-300 rounded-full px-8 py-2 w-fit border border-green-900'>
                         <lord-icon
-                        src="https://cdn.lordicon.com/jgnvfzqg.json"
-                        trigger="hover">
-                    </lord-icon>
+                            src="https://cdn.lordicon.com/jgnvfzqg.json"
+                            trigger="hover">
+                        </lord-icon>
                         Add Password</button>
                 </div>
 
                 <div className="passwords">
                     <h2>Your Passwords</h2>
-                    <table>
-                        
+                        <table className="table-auto w-full rounded-md overflow-hidden">
+                            <thead className='bg-green-800 text-white'>
+                                <tr>
+                                    <th>Song</th>
+                                    <th>Artist</th>
+                                    <th>Year</th>
+                                </tr>
+                            </thead>
+                            <tbody className='bg-green-100'>
+                                <tr>
+                                    <td className="text-center border border-white py-2 w-32">Malcolm Lockyer</td>
+                                    <td className="text-center border border-white py-2 w-32">The Sliding Mr. Bones</td>
+                                    <td className="text-center border border-white py-2 w-32">1961</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-center border border-white py-2 w-32">Witchy Woman</td>
+                                    <td className="text-center border border-white py-2 w-32">The Eagles</td>
+                                    <td className="text-center border border-white py-2 w-32">1972</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-center border border-white py-2 w-32">Shining Star</td>
+                                    <td className="text-center border border-white py-2 w-32">Earth, Wind, and Fire</td>
+                                    <td className="text-center border border-white py-2 w-32">1975</td>
+                                </tr>
+                            </tbody>
                     </table>
                 </div>
             </div>
