@@ -1,13 +1,45 @@
 import React from 'react'
+import { useRef, useState , useEffect} from 'react';
 
 const Manager = () => {
+    const ref = useRef()
+    const [form, setform] = useState({site: "", username: "", password: ""})
+    const [passwordArray, setPasswordArray] = useState([]);
+
+    useEffect(() => {
+        let passwords = localStorage.getItem("passwords");
+        if(passwords){
+            setPasswordArray(JSON.parse(passwords))
+        }
+    },[])
+
+    const showPassword = () =>{
+        alert("show the password");
+        if(ref.current.src.includes("eyecross.png")){
+            ref.current.src = "../icons/eye.png";
+        }
+        else{
+            ref.current.src = "../icons/eyecross.png";
+        }
+    }
+
+    const savePassword = () =>{
+        setPasswordArray([...passwordArray,form])
+        localStorage.setItem("passwords",JSON.stringify([...passwordArray,form]))
+        console.log([...passwordArray,form]);
+        
+    }
+
+    const handleChange = (e) =>{
+        setform({...form, [e.target.name]: e.target.value})
+    }
     return (
         <>
             {/* background code copied from bg.ibelick.com */}
-            <div class="absolute top-0 z-[-2] h-screen w-screen bg-green-50 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+            <div className="absolute top-0 z-[-2] h-screen w-screen bg-green-50 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
 
             <div className="mycontainer">
-                <h1 className='text-4xl text font-bold text-center'>
+                <h1 className='text-4xl font-bold text-center'>
                     <span className="text-green-500">&lt;</span>
                     <span>Vault</span>
                     <span className="text-green-500">IX/&gt;</span>
@@ -16,18 +48,33 @@ const Manager = () => {
 
 
                 <div className="text-black flex flex-col p-4 gap-8 items-center">
-                    <input className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='' id='' />
+                    <input value={form.site} onChange={handleChange} placeholder='Enter Website URL' className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='site' id='' />
+
                     <div className="flex w-full justify-between gap-8">
-                        <input className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='' id='' />
-                        <input className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='' id='' />
+                        <input value={form.username} onChange={handleChange} placeholder='Enter Username' className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='username' id='' />
+
+                        <div className="relative">
+
+                        <input value={form.password} onChange={handleChange} placeholder='Enter Password' className="rounded-full border border-green-500 w-full p-4 py-1" type="text" name='password' id='' />
+                        <span className="absolute right-[3px] top-[4px] cursor-pointer" onClick={showPassword}>
+                            <img ref={ref} width={26} src="../icons/eye.png" alt="eye" className="p-1" />
+                        </span>
+                        </div>
                     </div>
                     
-                    <button className='flex justify-center items-center bg-green-400 hover:bg-green-300 rounded-full px-4 py-2 w-fit'>
+                    <button onClick={savePassword} className='flex justify-center items-center gap-2 bg-green-400 hover:bg-green-300 rounded-full px-8 py-2 w-fit border border-green-900'>
                         <lord-icon
                         src="https://cdn.lordicon.com/jgnvfzqg.json"
                         trigger="hover">
                     </lord-icon>
                         Add Password</button>
+                </div>
+
+                <div className="passwords">
+                    <h2>Your Passwords</h2>
+                    <table>
+                        
+                    </table>
                 </div>
             </div>
 
