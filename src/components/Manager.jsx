@@ -1,6 +1,11 @@
 import React from 'react'
 import { useRef, useState, useEffect } from 'react';
 
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const Manager = () => {
     const ref = useRef()
     const passwordRef = useRef()
@@ -13,6 +18,25 @@ const Manager = () => {
             setPasswordArray(JSON.parse(passwords))
         }
     }, [])
+
+    const copyText = (text) => {
+        navigator.clipboard.writeText(text);
+        console.log(text);
+
+        toast('🚀 Copied to clipboard!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+
+
+    }
 
     const showPassword = () => {
         alert("show the password");
@@ -42,6 +66,23 @@ const Manager = () => {
     }
     return (
         <>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+            />
+
+
+
             {/* background code copied from bg.ibelick.com */}
             <div className="absolute top-0 z-[-2] h-screen w-max bg-green-50 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
 
@@ -95,45 +136,45 @@ const Manager = () => {
                                     return <tr key={index}>
                                         <td className="text-center border border-white py-2 justify-center">
                                             <div className='flex items-center justify-center'>
-                                            <a href={item.site} target='_blank'>
-                                            
-                                            <span>{item.site}</span>
-                                        </a>
-                                            <div className="lordiconcopy size-7 cursor-pointer">
+                                                <a href={item.site} target='_blank'>
 
-                                                <lord-icon
-                                                    style={{ "width": "25px", "height": "25px", "padding-top": "3px", "padding-left": "3px" }}
-                                                    src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                    trigger="hover" >
-                                                </lord-icon>
-                                            </div>
+                                                    <span>{item.site}</span>
+                                                </a>
+                                                <div className="lordiconcopy size-7 cursor-pointer">
+
+                                                    <lord-icon
+                                                        style={{ "width": "25px", "height": "25px", "paddingTop": "3px", "paddingLeft": "3px" }}
+                                                        src="https://cdn.lordicon.com/iykgtsbt.json"
+                                                        trigger="hover" onClick={() => { copyText(item.site) }}>
+                                                    </lord-icon>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="text-center border border-white py-2 justify-center">
                                             <div className='flex items-center justify-center'>
-                                            
-                                            <span>{item.username}</span>
-                                            <div className="lordiconcopy size-7 cursor-pointer">
 
-                                                <lord-icon
-                                                    style={{ "width": "25px", "height": "25px", "padding-top": "3px", "padding-left": "3px" }}
-                                                    src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                    trigger="hover" >
-                                                </lord-icon>
-                                            </div>
+                                                <span>{item.username}</span>
+                                                <div className="lordiconcopy size-7 cursor-pointer">
+
+                                                    <lord-icon
+                                                        style={{ "width": "25px", "height": "25px", "paddingTop": "3px", "paddingLeft": "3px" }}
+                                                        src="https://cdn.lordicon.com/iykgtsbt.json"
+                                                        trigger="hover" onClick={() => { copyText(item.username) }}>
+                                                    </lord-icon>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="text-center border border-white py-2 justify-center">
                                             <div className='flex items-center justify-center'>
-                                            <span>{item.password}</span>
-                                            <div className="lordiconcopy size-7 cursor-pointer">
+                                                <span>{item.password}</span>
+                                                <div className="lordiconcopy size-7 cursor-pointer">
 
-                                                <lord-icon
-                                                    style={{ "width": "25px", "height": "25px", "padding-top": "3px", "padding-left": "3px" }}
-                                                    src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                    trigger="hover" >
-                                                </lord-icon>
-                                            </div>
+                                                    <lord-icon
+                                                        style={{ "width": "25px", "height": "25px", "paddingTop": "3px", "paddingLeft": "3px" }}
+                                                        src="https://cdn.lordicon.com/iykgtsbt.json"
+                                                        trigger="hover" onClick={() => { copyText(item.password) }}>
+                                                    </lord-icon>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
