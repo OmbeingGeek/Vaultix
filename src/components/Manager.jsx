@@ -5,6 +5,8 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+import { v4 as uuidv4 } from 'uuid';
+
 
 const Manager = () => {
     const ref = useRef()
@@ -55,10 +57,58 @@ const Manager = () => {
             alert("Don't Leave any entry empty!!");
             return;
         }
-        setPasswordArray([...passwordArray, form])
-        localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
-        console.log([...passwordArray, form]);
+        setPasswordArray([...passwordArray, { ...form, id: uuidv4() }])
+        localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+        console.log([...passwordArray, { ...form, id: uuidv4() }]);
 
+        setform({ site: "", username: "", password: "" })
+
+        toast('🚀 Password Saved!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+
+    }
+
+    const deletePassword = (id) => {
+        console.log("Deleting Password info with id : ", id);
+        let c = confirm("Do you really want to delete this?")
+        if(c){
+
+            setPasswordArray(passwordArray.filter(item=>item.id!==id))
+            localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item=>item.id!==id)))
+
+            toast('🚀 Successfully Deleted!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+        }
+
+        // console.log([...passwordArray, {...form, id: uuidv4()}]);
+    }
+    const editPassword = (id) => {
+        console.log("editing Password info with id : ", id);
+        setform(passwordArray.filter(i=>i.id === id)[0])
+        setPasswordArray(passwordArray.filter(item=>item.id!==id))
+
+        // setPasswordArray([...passwordArray, {...form, id: uuidv4()}])
+        // localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form, id: uuidv4()}]))
+
+        // console.log([...passwordArray, {...form, id: uuidv4()}]);
     }
 
     const handleChange = (e) => {
@@ -115,7 +165,7 @@ const Manager = () => {
                             src="https://cdn.lordicon.com/jgnvfzqg.json"
                             trigger="hover">
                         </lord-icon>
-                        Add Password</button>
+                        Save</button>
                 </div>
 
                 <div className="passwords">
@@ -128,6 +178,7 @@ const Manager = () => {
                                     <th>Site</th>
                                     <th>Username</th>
                                     <th>Password</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody className='bg-green-100'>
@@ -176,6 +227,26 @@ const Manager = () => {
                                                     </lord-icon>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td className="text-center border border-white py-2 justify-center">
+                                            <span className='cursor-pointer mx-1' onClick={() => { editPassword(item.id) }}>
+                                                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                                                <lord-icon
+                                                    src="https://cdn.lordicon.com/gwlusjdu.json"
+                                                    trigger="hover"
+                                                    style={{ "width": "25px", "height": "25px" }}>
+                                                </lord-icon>
+                                            </span>
+                                            <span className='cursor-pointer mx-1' onClick={() => { deletePassword(item.id) }}>
+                                                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                                                <lord-icon
+                                                    src="https://cdn.lordicon.com/skkahier.json"
+                                                    trigger="hover"
+                                                    style={{ "width": "25px", "height": "25px" }
+                                                    }>
+                                                </lord-icon>
+                                            </span>
+
                                         </td>
                                     </tr>
                                 })}
