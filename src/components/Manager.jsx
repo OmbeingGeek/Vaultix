@@ -57,14 +57,18 @@ const Manager = () => {
         }
     }
 
-    const savePassword = () => {
+    const savePassword = async () => {
         if (!form.site || !form.password || !form.username) {
             alert("Don't Leave any entry empty!!");
             return;
         }
+
+        await fetch("http://localhost:3000/", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: form.id})})
+        
         setPasswordArray([...passwordArray, { ...form, id: uuidv4() }])
-        localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
-        console.log([...passwordArray, { ...form, id: uuidv4() }]);
+        await fetch("http://localhost:3000/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, id: uuidv4() })})
+        // localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+        // console.log([...passwordArray, { ...form, id: uuidv4() }]);
 
         setform({ site: "", username: "", password: "" })
 
@@ -82,13 +86,15 @@ const Manager = () => {
 
     }
 
-    const deletePassword = (id) => {
+    const deletePassword = async (id) => {
         console.log("Deleting Password info with id : ", id);
         let c = confirm("Do you really want to delete this?")
         if(c){
 
             setPasswordArray(passwordArray.filter(item=>item.id!==id))
-            localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item=>item.id!==id)))
+            // localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item=>item.id!==id)))
+             let res = await fetch("http://localhost:3000/", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id})})
+        
 
             toast('🚀 Successfully Deleted!', {
             position: "top-right",
@@ -107,7 +113,7 @@ const Manager = () => {
     }
     const editPassword = (id) => {
         console.log("editing Password info with id : ", id);
-        setform(passwordArray.filter(i=>i.id === id)[0])
+        setform({...passwordArray.filter(i=>i.id === id)[0], id: id})
         setPasswordArray(passwordArray.filter(item=>item.id!==id))
 
         // setPasswordArray([...passwordArray, {...form, id: uuidv4()}])
@@ -210,25 +216,25 @@ const Manager = () => {
                                             <div className='flex items-center justify-center'>
 
                                                 <span>{item.username}</span>
-                                                <div className="lordiconcopy size-7 cursor-pointer">
+                                                <div className="lordiconcopy size-7 cursor-pointer" onClick={() => { copyText(item.username) }}>
 
                                                     <lord-icon
                                                         style={{ "width": "25px", "height": "25px", "paddingTop": "3px", "paddingLeft": "3px" }}
                                                         src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                        trigger="hover" onClick={() => { copyText(item.username) }}>
+                                                        trigger="hover" >
                                                     </lord-icon>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="text-center border border-white py-2 justify-center">
                                             <div className='flex items-center justify-center'>
-                                                <span>{item.password}</span>
-                                                <div className="lordiconcopy size-7 cursor-pointer">
+                                                <span>{"*".repeat(item.password.length)}</span>
+                                                <div className="lordiconcopy size-7 cursor-pointer" onClick={() => { copyText(item.password) }}>
 
                                                     <lord-icon
                                                         style={{ "width": "25px", "height": "25px", "paddingTop": "3px", "paddingLeft": "3px" }}
                                                         src="https://cdn.lordicon.com/iykgtsbt.json"
-                                                        trigger="hover" onClick={() => { copyText(item.password) }}>
+                                                        trigger="hover" >
                                                     </lord-icon>
                                                 </div>
                                             </div>
